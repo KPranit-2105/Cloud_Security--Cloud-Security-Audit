@@ -1,0 +1,9 @@
+Finding_ID,Resource_ID,Requirement,CIS_Ref,PCI_DSS_Ref,Likelihood,Impact,Inherent_Risk,Severity,Recommendation,Owner,Target_Date,Status
+FIND-001,arn:aws:iam::123456789012:root,Root MFA Enforcement,1.1,8.3.1,5,5,25,Critical,Enforce Hardware MFA on root account and delete access keys,Security Lead,2026-08-15,Open
+FIND-002,arn:aws:s3:::apexpay-customer-documents-prod,Public S3 Access Block,2.1.51,1.3.1,4,5,20,Critical,Enable S3 Account & Bucket level Block Public Access,SecOps Lead,2026-08-16,Open
+FIND-003,arn:aws:iam::123456789012:user/dev-deployer-prod,IAM User Console MFA,1.10,8.3.2,4,4,16,Critical,Enforce IAM MFA policy for console users or migrate to AWS IAM Identity Center,DevOps Lead,2026-08-18,Open
+FIND-004,sg-0a1b2c3d4e5f67890 (apexpay-app-db-sg),Unrestricted Inbound SSH,5.2,1.2.1,4,4,16,Critical,Restrict SSH access to SSM Session Manager or internal bastion VPN IP,Network Eng,2026-08-15,Open
+FIND-005,CloudTrail-Global,Multi-Region CloudTrail,3.1,10.2.1,3,4,12,High,Enable multi-region CloudTrail with KMS encryption and log validation,SecOps Lead,2026-08-25,Open
+FIND-006,arn:aws:kms:us-west-2:123456789012:key/a1b2c3d4,KMS Key Rotation,2.8,3.6.4,3,3,9,High,Enable annual KMS CMK automatic key rotation in KMS console/IaC,Cloud Architect,2026-08-30,Open
+FIND-007,arn:aws:ec2:us-east-1:123456789012:volume/vol-09876,EBS Unencrypted Volume,2.2.1,3.4.1,2,4,8,Medium,Snapshot unencrypted EBS volumes and re-create as encrypted with KMS CMK,Storage Admin,2026-09-10,Open
+FIND-008,arn:aws:ec2:us-east-1:123456789012:vpc/vpc-11223344,VPC Flow Logs Disabled,2.9,10.2.2,3,3,9,High,Enable VPC Flow Logs to S3 central log bucket with 1-year retention,SecOps Lead,2026-08-25,Open

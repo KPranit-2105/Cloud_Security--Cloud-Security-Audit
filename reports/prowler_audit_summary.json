@@ -1,0 +1,110 @@
+{
+  "AuditMetadata": {
+    "Tool": "Prowler v3.12.0",
+    "ScanDate": "2026-08-10T14:30:00Z",
+    "AccountID": "123456789012",
+    "Environment": "ApexPay Production (aws-us-east-1 / aws-us-west-2)",
+    "TargetFrameworks": ["CIS AWS Foundations Benchmark v1.5.0", "PCI-DSS v4.0", "SOC 2 Trust Services Criteria"],
+    "TotalChecksPerformed": 240,
+    "PassedChecks": 185,
+    "FailedChecks": 55,
+    "SummaryBySeverity": {
+      "Critical": 4,
+      "High": 14,
+      "Medium": 22,
+      "Low": 15
+    }
+  },
+  "AuditResults": [
+    {
+      "CheckID": "extra711_iam_root_mfa_enabled",
+      "CheckTitle": "Ensure Root Account Has MFA Enabled",
+      "Status": "FAIL",
+      "Severity": "Critical",
+      "Region": "us-east-1",
+      "ResourceID": "arn:aws:iam::123456789012:root",
+      "ComplianceMapping": {
+        "CIS_AWS_v1.5": "1.1",
+        "PCI_DSS_v4.0": "Req 8.3.1",
+        "NIST_800_53": "IA-2(1)"
+      },
+      "FindingDescription": "The root user account does not have a hardware or virtual MFA device configured.",
+      "RiskDescription": "Compromise of root credentials grants full administrative control without secondary authentication factor."
+    },
+    {
+      "CheckID": "s3_bucket_public_access_block",
+      "CheckTitle": "Ensure S3 Buckets Block Public Access",
+      "Status": "FAIL",
+      "Severity": "Critical",
+      "Region": "us-east-1",
+      "ResourceID": "arn:aws:s3:::apexpay-customer-documents-prod",
+      "ComplianceMapping": {
+        "CIS_AWS_v1.5": "2.1.51",
+        "PCI_DSS_v4.0": "Req 1.3.1",
+        "NIST_800_53": "AC-3"
+      },
+      "FindingDescription": "S3 Public Access Block is disabled on bucket containing sensitive customer KYC documents.",
+      "RiskDescription": "Risk of unauthenticated data exfiltration resulting in regulatory fines and brand damage."
+    },
+    {
+      "CheckID": "iam_user_no_mfa",
+      "CheckTitle": "Ensure MFA is Enabled for All IAM Users with Console Access",
+      "Status": "FAIL",
+      "Severity": "Critical",
+      "Region": "global",
+      "ResourceID": "arn:aws:iam::123456789012:user/dev-deployer-prod",
+      "ComplianceMapping": {
+        "CIS_AWS_v1.5": "1.10",
+        "PCI_DSS_v4.0": "Req 8.3.2",
+        "NIST_800_53": "IA-2"
+      },
+      "FindingDescription": "IAM user dev-deployer-prod has active console login password without MFA device bound.",
+      "RiskDescription": "Credential stuffing or phishing could yield interactive access to deployment environments."
+    },
+    {
+      "CheckID": "ec2_securitygroup_allow_ingress_from_internet_to_tcp_port_22",
+      "CheckTitle": "Ensure Security Groups Do Not Allow Ingress From 0.0.0.0/0 to Port 22 (SSH)",
+      "Status": "FAIL",
+      "Severity": "Critical",
+      "Region": "us-east-1",
+      "ResourceID": "sg-0a1b2c3d4e5f67890 (apexpay-app-db-sg)",
+      "ComplianceMapping": {
+        "CIS_AWS_v1.5": "5.2",
+        "PCI_DSS_v4.0": "Req 1.2.1",
+        "NIST_800_53": "AC-4"
+      },
+      "FindingDescription": "Security group attached to DB subnet allows unrestricted inbound SSH (Port 22) from 0.0.0.0/0.",
+      "RiskDescription": "Direct exposure of backend infrastructure to internet-wide brute-force and exploit attempts."
+    },
+    {
+      "CheckID": "cloudtrail_multi_region_enabled",
+      "CheckTitle": "Ensure CloudTrail is Enabled Across All Regions",
+      "Status": "FAIL",
+      "Severity": "High",
+      "Region": "global",
+      "ResourceID": "CloudTrail-Global",
+      "ComplianceMapping": {
+        "CIS_AWS_v1.5": "3.1",
+        "PCI_DSS_v4.0": "Req 10.2.1",
+        "NIST_800_53": "AU-2"
+      },
+      "FindingDescription": "CloudTrail is only enabled in us-east-1; non-default regions have unmonitored API activity.",
+      "RiskDescription": "Attacker operating in secondary regions (e.g., eu-west-1) can spin up unauthorized resources undetected."
+    },
+    {
+      "CheckID": "kms_cmk_rotation_enabled",
+      "CheckTitle": "Ensure Automatic Key Rotation is Enabled for AWS KMS Customer Managed Keys",
+      "Status": "FAIL",
+      "Severity": "High",
+      "Region": "us-west-2",
+      "ResourceID": "arn:aws:kms:us-west-2:123456789012:key/a1b2c3d4-5678-90ab-cdef-1234567890ab",
+      "ComplianceMapping": {
+        "CIS_AWS_v1.5": "2.8",
+        "PCI_DSS_v4.0": "Req 3.6.4",
+        "NIST_800_53": "SC-12"
+      },
+      "FindingDescription": "KMS Key protecting transaction logs does not have annual automatic key rotation turned on.",
+      "RiskDescription": "Long-term cryptographic key reuse increases blast radius if key material is ever compromised."
+    }
+  ]
+}
